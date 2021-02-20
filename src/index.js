@@ -1,30 +1,38 @@
 import Phaser from 'phaser';
-import logoImg from './assets/logo.png';
 
-class MyGame extends Phaser.Scene
-{
-    constructor ()
-    {
+import sky from './assets/sky.png';
+import platform from './assets/platform.png';
+import star from './assets/star.png';
+import bomb from './assets/bomb.png';
+import dude from './assets/dude.png';
+
+class MyGame extends Phaser.Scene {
+    constructor () {
         super();
     }
 
-    preload ()
-    {
-        this.load.image('logo', logoImg);
+    preload () {
+        this.load.image('sky', sky);
+        this.load.image('ground', platform);
+        this.load.image('star', star);
+        this.load.image('bomb', bomb);
+        this.load.spritesheet('dude', dude, { frameWidth: 32, frameHeight: 48 });
     }
       
-    create ()
-    {
-        const logo = this.add.image(400, 150, 'logo');
+    create () {
+        this.add.image(400, 300, 'sky');
       
-        this.tweens.add({
-            targets: logo,
-            y: 450,
-            duration: 2000,
-            ease: "Power2",
-            yoyo: true,
-            loop: -1
-        });
+        const platforms = this.physics.add.staticGroup();
+
+        platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+
+        platforms.create(600, 400, 'ground');
+        platforms.create(50, 250, 'ground');
+        platforms.create(750, 220, 'ground');
+    }
+
+    update() {
+
     }
 }
 
@@ -33,6 +41,13 @@ const config = {
     parent: 'phaser-example',
     width: 800,
     height: 600,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 300},
+            debug: false
+        }
+    },
     scene: MyGame
 };
 
